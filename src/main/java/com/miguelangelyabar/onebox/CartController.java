@@ -29,13 +29,18 @@ public class CartController {
 		Cart cart = carts.get(id);
 		
 		if (cart != null) {
-			return cart;
+			if (!cart.isExpired()) {
+				return cart;
+			}
+			else {
+				deleteCart(id);
+			}
 		}
 		
 		return null;
 	}
 	
-	@GetMapping("/getAllCarts")
+	@GetMapping
 	public Map<String,Cart> getAllCartsInfo() {
 		return carts;
 	}
@@ -51,6 +56,7 @@ public class CartController {
 	
 	@DeleteMapping("/deleteCart/{id}")
 	public void deleteCart(@PathVariable String id) {
+		carts.get(id).deleteCart();
 		carts.remove(id);
 	}
 }
